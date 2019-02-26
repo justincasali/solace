@@ -1,15 +1,27 @@
 variable "project" {
-  description = "Project name"
+  description = "project name"
 }
 
 variable "release" {
-  description = "Project release"
+  description = "project release"
 }
 
 variable "region" {
-  description = "AWS infrastructure region"
+  description = "aws infrastructure region"
 }
 
 variable "profile" {
-  description = "AWS cred profile"
+  description = "aws credential profile"
+}
+
+variable "request_timeout" {
+  description = "request lambda and sqs timeout"
+}
+
+variable "backup_timeout" {
+  description = "backup lambda and sqs timeout"
+}
+
+variable "restore_timeout" {
+  description = "restore lambda and sqs timeout"
 }
