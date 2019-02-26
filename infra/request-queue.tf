@@ -7,7 +7,7 @@ resource "aws_sqs_queue" "request_queue" {
   redrive_policy = <<EOF
 {
   "deadLetterTargetArn": "${aws_sqs_queue.request_dead_letter_queue.arn}",
-  "maxReceiveCount": ${var.request_retry}
+  "maxReceiveCount": ${var.request_count}
 }
 EOF
 }

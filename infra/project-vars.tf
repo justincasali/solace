@@ -29,17 +29,16 @@ variable "restore_timeout" {
   default     = 30
 }
 
-variable "request_retry" {
-  description = "request sqs retry count"
+variable "request_count" {
+  description = "request sqs max receive count"
+}
+
+variable "backup_count" {
+  description = "backup sqs max receive count"
   default     = 3
 }
 
-variable "backup_retry" {
-  description = "backup sqs retry count"
-  default     = 3
-}
-
-variable "restore_retry" {
-  description = "restore sqs retry count"
+variable "restore_count" {
+  description = "restore sqs max receive count"
   default     = 3
 }
