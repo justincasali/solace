@@ -27,16 +27,16 @@ status_table = os.environ["STATUS_TABLE"]
 # Entry point
 def lambda_handler(event, context):
 
-    # Get timestamp
-    timestamp = event["Records"][0]["attributes"]["SentTimestamp"]
-
     # Load message from json
     message = json.loads(event["Records"][0]["body"])
+
+    # Add timestamp to message
+    message["timestamp"] = event["Records"][0]["attributes"]["SentTimestamp"]
 
     # Write entry to db
     dynamodb.put_item(TableName=status_table, Item={
         "table-arn": {"S": message["table-arn"]},
-        "timestamp": {"N": timestamp},
+        "timestamp": {"N": message["timestamp"]},
         "s3-arn":    {"S": message["s3-arn"]},
         "action":    {"S": message["action"]},
         "status":    {"S": RECEIVED}
@@ -51,7 +51,7 @@ def lambda_handler(event, context):
         # Update entry
         dynamodb.update_item(
             TableName=status_table,
-            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": timestamp}},
+            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": message["timestamp"]}},
             ExpressionAttributeNames={"#N": "status"},
             ExpressionAttributeValues={":V": {"S": QUEUED}},
             UpdateExpression="SET #N = :V"
@@ -69,7 +69,7 @@ def lambda_handler(event, context):
         # Update entry
         dynamodb.update_item(
             TableName=status_table,
-            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": timestamp}},
+            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": message["timestamp"]}},
             ExpressionAttributeNames={"#N": "status"},
             ExpressionAttributeValues={":V": {"S": QUEUED}},
             UpdateExpression="SET #N = :V"
