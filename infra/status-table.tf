@@ -1,4 +1,4 @@
-resource "aws_dynamodb_table" "status-table" {
+resource "aws_dynamodb_table" "status_table" {
   name         = "${var.project}-${var.release}-status-table"
   billing_mode = "PAY_PER_REQUEST"
 
