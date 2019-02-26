@@ -51,7 +51,7 @@ def lambda_handler(event, context):
         # Update entry
         dynamodb.update_item(
             TableName=status_table,
-            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": message["timestamp"]}},
+            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": timestamp}},
             ExpressionAttributeNames={"#N": "status"},
             ExpressionAttributeValues={":V": {"S": QUEUED}},
             UpdateExpression="SET #N = :V"
@@ -69,7 +69,7 @@ def lambda_handler(event, context):
         # Update entry
         dynamodb.update_item(
             TableName=status_table,
-            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": message["timestamp"]}},
+            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": timestamp}},
             ExpressionAttributeNames={"#N": "status"},
             ExpressionAttributeValues={":V": {"S": QUEUED}},
             UpdateExpression="SET #N = :V"
