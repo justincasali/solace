@@ -31,6 +31,7 @@ variable "restore_timeout" {
 
 variable "request_count" {
   description = "request sqs max receive count"
+  default     = 3
 }
 
 variable "backup_count" {
