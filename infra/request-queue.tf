@@ -4,4 +4,15 @@ resource "aws_sqs_queue" "request_queue" {
 
   # policy = ""
   # redrive_policy = ""
+
+  redrive_policy = <<EOF
+{
+  "deadLetterTargetArn": "${aws_sqs_queue.request_dead_letter_queue.arn}",
+  "maxReceiveCount": ${var.request_retry}
+}
+EOF
+}
+
+resource "aws_sqs_queue" "request_dead_letter_queue" {
+  name = "${var.project}-${var.release}-request-dead-letter-queue"
 }
