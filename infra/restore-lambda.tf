@@ -17,8 +17,8 @@ resource "aws_lambda_function" "restore_lambda" {
 
   environment {
     variables {
-      STATUS_TABLE = "${aws_dynamodb_table.status_table.name}"
       RESTORE_QUEUE = "${aws_sqs_queue.restore_queue.name}"
+      RESTORE_TABLE = "${aws_dynamodb_table.restore_table.name}"
     }
   }
 }

@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "restore_lambda_resource_policy" {
     ]
 
     resources = [
-      "${aws_dynamodb_table.status_table.arn}",
+      "${aws_dynamodb_table.restore_table.arn}",
     ]
   }
 
