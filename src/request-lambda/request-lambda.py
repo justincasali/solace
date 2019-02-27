@@ -73,6 +73,9 @@ def lambda_handler(event, context):
             UpdateExpression="SET #N = :V"
         )
 
+        # Print status
+        print(message["key"], QUEUED)
+
         # Complete
         return
 
@@ -112,6 +115,9 @@ def lambda_handler(event, context):
             ExpressionAttributeValues={":V": {"S": QUEUED}},
             UpdateExpression="SET #N = :V"
         )
+
+        # Print status
+        print(message["key"], QUEUED)
 
         # Complete
         return
