@@ -1,4 +1,8 @@
 resource "aws_dynamodb_table" "backup_table" {
+  lifecycle {
+    prevent_destroy = true
+  }
+
   name         = "${var.project}-${var.release}-backup-table"
   billing_mode = "PAY_PER_REQUEST"
 
