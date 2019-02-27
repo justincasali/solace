@@ -36,91 +36,56 @@ def lambda_handler(event, context):
     # Add timestamp to message
     message["timestamp"] = event["Records"][0]["attributes"]["SentTimestamp"]
 
-    # Backup action
+    # Backup vars
     if message["action"] == "backup":
 
-        # Build table key
+        # Set table and queue and build key
+        table, queue = backup_table, backup_queue
         message["key"] = "-".join([message["table-region"], message["table-name"]])
 
-        # Write entry to db
-        dynamodb.put_item(TableName=backup_table, Item={
-            "key":            {"S": message["key"]},
-            "timestamp":      {"N": message["timestamp"]},
-            "table-region":   {"S": message["table-region"]},
-            "table-name":     {"S": message["table-name"]},
-            "bucket-region":  {"S": message["bucket-region"]},
-            "bucket-name":    {"S": message["bucket-name"]},
-            "bucket-prefix":  {"S": message["bucket-prefix"]},
-            "total-segments": {"N": str(message["total-segments"])},
-            "status":         {"S": RECEIVED}
-        })
-
-        # Seed backup queue
-        for segment in range(message["total-segments"]):
-
-            # Set message segment
-            message["segment"] = segment
-
-            # Send message to backup queue
-            sqs.send_message(QueueUrl=backup_queue, MessageBody=json.dumps(message))
-
-        # Update status
-        dynamodb.update_item(
-            TableName=backup_table,
-            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#N": "status"},
-            ExpressionAttributeValues={":V": {"S": QUEUED}},
-            UpdateExpression="SET #N = :V"
-        )
-
-        # Print queued message
-        print(QUEUED, message["key"], message["timestamp"])
-
-        # Complete
-        return
-
-    # Restore action
+    # Restore vars
     if message["action"] == "restore":
 
-        # Build table key
+        # Set table and queue and build key
+        table, queue = restore_table, restore_queue
         message["key"] = "-".join([message["bucket-region"], message["bucket-name"], message["bucket-prefix"]])
 
-        # Write entry to db
-        dynamodb.put_item(TableName=restore_table, Item={
-            "key":            {"S": message["key"]},
-            "timestamp":      {"N": message["timestamp"]},
-            "bucket-region":  {"S": message["bucket-region"]},
-            "bucket-name":    {"S": message["bucket-name"]},
-            "bucket-prefix":  {"S": message["bucket-prefix"]},
-            "table-region":   {"S": message["table-region"]},
-            "table-name":     {"S": message["table-name"]},
-            "total-segments": {"N": str(message["total-segments"])},
-            "status":         {"S": RECEIVED}
-        })
-
-        # Seed restore queue
-        for segment in range(message["total-segments"]):
-
-            # Set message segment
-            message["segment"] = segment
-
-            # Send message to restore queue
-            sqs.send_message(QueueUrl=restore_queue, MessageBody=json.dumps(message))
-
-        # Update status
-        dynamodb.update_item(
-            TableName=restore_table,
-            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#N": "status"},
-            ExpressionAttributeValues={":V": {"S": QUEUED}},
-            UpdateExpression="SET #N = :V"
-        )
-
-        # Print queued message
-        print(QUEUED, message["key"], message["timestamp"])
-
-        # Complete
-        return
-
     # Error on invalid action
-    raise Exception("invalid request action")
+    if message["action"] != "backup" and message["action"] != "restore":
+        raise Exception("invalid request action")
+
+
+    # Write entry to db
+    dynamodb.put_item(TableName=table, Item={
+        "key":            {"S": message["key"]},
+        "timestamp":      {"N": message["timestamp"]},
+        "table-region":   {"S": message["table-region"]},
+        "table-name":     {"S": message["table-name"]},
+        "bucket-region":  {"S": message["bucket-region"]},
+        "bucket-name":    {"S": message["bucket-name"]},
+        "bucket-prefix":  {"S": message["bucket-prefix"]},
+        "total-segments": {"N": str(message["total-segments"])},
+        "status":         {"S": RECEIVED}
+    })
+
+    # Seed queue
+    for segment in range(message["total-segments"]):
+
+        # Set message segment
+        message["segment"] = segment
+
+        # Send message to queue
+        sqs.send_message(QueueUrl=queue, MessageBody=json.dumps(message))
+
+    # Update status
+    dynamodb.update_item(
+        TableName=table,
+        Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
+        ExpressionAttributeNames={"#N": "status"},
+        ExpressionAttributeValues={":V": {"S": QUEUED}},
+        UpdateExpression="SET #N = :V"
+    )
+
+
+    # Print status message
+    print(f'seeded {message["key"]}@{message["timestamp"]} to {message["action"]} queue')
