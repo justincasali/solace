@@ -51,11 +51,21 @@ def lambda_handler(event, context):
             "bucket-region": {"S": message["bucket-region"]},
             "bucket-name":   {"S": message["bucket-name"]},
             "bucket-prefix": {"S": message["bucket-prefix"]},
+            "threads":       {"S": message["threads"]},
             "status":        {"S": RECEIVED}
         })
 
-        # Send message
-        sqs.send_message(QueueUrl=backup_queue, MessageBody=json.dumps(message))
+        # Set total segments
+        message["total-segments"] = message["threads"]
+
+        # Seed backup queue
+        for segment in range(message["total-segments"]):
+
+            # Set message segment
+            message["segment"] = segment
+
+            # Send message to backup queue
+            sqs.send_message(QueueUrl=backup_queue, MessageBody=json.dumps(message))
 
         # Update status
         dynamodb.update_item(
@@ -84,11 +94,21 @@ def lambda_handler(event, context):
             "bucket-prefix": {"S": message["bucket-prefix"]},
             "table-region":  {"S": message["table-region"]},
             "table-name":    {"S": message["table-name"]},
+            "threads":       {"S": message["threads"]},
             "status":        {"S": RECEIVED}
         })
 
-        # Send message
-        sqs.send_message(QueueUrl=restore_queue, MessageBody=json.dumps(message))
+        # Set total segments
+        message["total-segments"] = message["threads"]
+
+        # Seed restore queue
+        for segment in range(message["total-segments"]):
+
+            # Set message segment
+            message["segment"] = segment
+
+            # Send message to restore queue
+            sqs.send_message(QueueUrl=restore_queue, MessageBody=json.dumps(message))
 
         # Update status
         dynamodb.update_item(
