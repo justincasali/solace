@@ -34,7 +34,7 @@ def lambda_handler(event, context):
     message = json.loads(event["Records"][0]["body"])
 
     # Add timestamp to message
-    message["timestamp"] = int(event["Records"][0]["attributes"]["SentTimestamp"])
+    message["timestamp"] = event["Records"][0]["attributes"]["SentTimestamp"]
 
     # Backup action
     if message["action"] == "backup":
@@ -45,7 +45,7 @@ def lambda_handler(event, context):
         # Write entry to db
         dynamodb.put_item(TableName=backup_table, Item={
             "key":            {"S": message["key"]},
-            "timestamp":      {"N": str(message["timestamp"])},
+            "timestamp":      {"N": message["timestamp"]},
             "table-region":   {"S": message["table-region"]},
             "table-name":     {"S": message["table-name"]},
             "bucket-region":  {"S": message["bucket-region"]},
@@ -85,7 +85,7 @@ def lambda_handler(event, context):
         # Write entry to db
         dynamodb.put_item(TableName=restore_table, Item={
             "key":            {"S": message["key"]},
-            "timestamp":      {"N": str(message["timestamp"])},
+            "timestamp":      {"N": message["timestamp"]},
             "bucket-region":  {"S": message["bucket-region"]},
             "bucket-name":    {"S": message["bucket-name"]},
             "bucket-prefix":  {"S": message["bucket-prefix"]},
