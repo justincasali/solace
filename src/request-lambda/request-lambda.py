@@ -88,4 +88,4 @@ def lambda_handler(event, context):
 
 
     # Print status message
-    print(f'seeded {message["key"]}@{message["timestamp"]} to {message["action"]} queue')
+    print(f'sent {message["key"]} {message["timestamp"]} to {message["action"]} queue')
