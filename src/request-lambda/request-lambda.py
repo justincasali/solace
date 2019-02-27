@@ -57,15 +57,16 @@ def lambda_handler(event, context):
 
     # Write entry to db
     dynamodb.put_item(TableName=table, Item={
-        "key":            {"S": message["key"]},
-        "timestamp":      {"N": message["timestamp"]},
-        "table-region":   {"S": message["table-region"]},
-        "table-name":     {"S": message["table-name"]},
-        "bucket-region":  {"S": message["bucket-region"]},
-        "bucket-name":    {"S": message["bucket-name"]},
-        "bucket-prefix":  {"S": message["bucket-prefix"]},
-        "total-segments": {"N": str(message["total-segments"])},
-        "status":         {"S": RECEIVED}
+        "key":               {"S": message["key"]},
+        "timestamp":         {"N": message["timestamp"]},
+        "table-region":      {"S": message["table-region"]},
+        "table-name":        {"S": message["table-name"]},
+        "bucket-region":     {"S": message["bucket-region"]},
+        "bucket-name":       {"S": message["bucket-name"]},
+        "bucket-prefix":     {"S": message["bucket-prefix"]},
+        "total-segments":    {"N": str(message["total-segments"])},
+        "segments-complete": {"N": "0"},
+        "status":            {"S": RECEIVED}
     })
 
     # Seed queue

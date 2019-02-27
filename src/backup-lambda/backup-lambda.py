@@ -103,7 +103,7 @@ def lambda_handler(event, context):
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
             ExpressionAttributeNames={"#N": "segments-complete"},
             ExpressionAttributeValues={":V": {"N": "1"}},
-            UpdateExpression="ADD #N :V",
+            UpdateExpression="SET #N = #N + :V",
             ReturnValues="UPDATED_NEW"
         )
 
