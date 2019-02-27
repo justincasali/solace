@@ -57,6 +57,15 @@ def lambda_handler(event, context):
         # Send message
         sqs.send_message(QueueUrl=backup_queue, MessageBody=json.dumps(message))
 
+        # Update status
+        dynamodb.update_item(
+            TableName=backup_table,
+            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
+            ExpressionAttributeNames={"#N": "status"},
+            ExpressionAttributeValues={":V": {"S": QUEUED}},
+            UpdateExpression="SET #N = :V"
+        )
+
         # Complete
         return
 
@@ -80,6 +89,15 @@ def lambda_handler(event, context):
 
         # Send message
         sqs.send_message(QueueUrl=restore_queue, MessageBody=json.dumps(message))
+
+        # Update status
+        dynamodb.update_item(
+            TableName=restore_table,
+            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
+            ExpressionAttributeNames={"#N": "status"},
+            ExpressionAttributeValues={":V": {"S": QUEUED}},
+            UpdateExpression="SET #N = :V"
+        )
 
         # Complete
         return
