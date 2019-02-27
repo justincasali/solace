@@ -73,8 +73,8 @@ def lambda_handler(event, context):
             UpdateExpression="SET #N = :V"
         )
 
-        # Print status
-        print(message["key"], message["timestamp"], QUEUED)
+        # Print queued message
+        print(QUEUED, message["key"], message["timestamp"])
 
         # Complete
         return
@@ -116,8 +116,8 @@ def lambda_handler(event, context):
             UpdateExpression="SET #N = :V"
         )
 
-        # Print status
-        print(message["key"], message["timestamp"], QUEUED)
+        # Print queued message
+        print(QUEUED, message["key"], message["timestamp"])
 
         # Complete
         return
