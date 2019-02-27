@@ -74,7 +74,7 @@ def lambda_handler(event, context):
         )
 
         # Print status
-        print(message["key"], QUEUED)
+        print(message["key"], message["timestamp"], QUEUED)
 
         # Complete
         return
@@ -117,7 +117,7 @@ def lambda_handler(event, context):
         )
 
         # Print status
-        print(message["key"], QUEUED)
+        print(message["key"], message["timestamp"], QUEUED)
 
         # Complete
         return
