@@ -2,8 +2,8 @@ import botocore.session
 import json
 import os
 
-# Status constants
-RECEIVED, QUEUED = "received", "queued"
+# Stage constants
+REQUEST, QUEUE = "request", "queue"
 
 # AWS session
 session = botocore.session.get_session()
@@ -66,7 +66,9 @@ def lambda_handler(event, context):
         "bucket-prefix":     {"S": message["bucket-prefix"]},
         "total-segments":    {"N": str(message["total-segments"])},
         "segments-complete": {"N": "0"},
-        "status":            {"S": RECEIVED}
+        "complete":          {"BOOL": False},
+        "failure":           {"BOOL": False},
+        "stage":             {"S": REQUEST}
     })
 
     # Seed queue
@@ -78,13 +80,13 @@ def lambda_handler(event, context):
         # Send message to queue
         sqs.send_message(QueueUrl=queue, MessageBody=json.dumps(message))
 
-    # Update status to queued
+    # Update stage to queue
     dynamodb.update_item(
         TableName=table,
         Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-        ExpressionAttributeNames={"#N": "status"},
-        ExpressionAttributeValues={":V": {"S": QUEUED}},
-        UpdateExpression="SET #N = :V"
+        ExpressionAttributeNames={"#S": "stage"},
+        ExpressionAttributeValues={":Q": {"S": QUEUE}},
+        UpdateExpression="SET #S = :Q"
     )
 
 

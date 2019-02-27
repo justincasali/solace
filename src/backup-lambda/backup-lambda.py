@@ -3,8 +3,8 @@ import json
 import zlib
 import os
 
-# Status constants
-RUNNING, COMPLETE = "running", "complete"
+# Stage constants
+RUN, END = "run", "end"
 
 # AWS session
 session = botocore.session.get_session()
@@ -40,13 +40,13 @@ def lambda_handler(event, context):
         # Setup vars
         message["batch"], message["count"] = 0, 0
 
-        # Update status to running
+        # Update stage to run
         dynamodb.update_item(
             TableName=backup_table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#N": "status"},
-            ExpressionAttributeValues={":V": {"S": RUNNING}},
-            UpdateExpression="SET #N = :V"
+            ExpressionAttributeNames={"#S": "stage"},
+            ExpressionAttributeValues={":R": {"S": RUN}},
+            UpdateExpression="SET #S = :R"
         )
 
 
@@ -97,30 +97,32 @@ def lambda_handler(event, context):
     # Segment complete
     else:
 
+        # THIS NEEDS TO BE ATOMIC / NOT FAIL
+
         # Increment segments complete
         update = dynamodb.update_item(
             TableName=backup_table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#N": "segments-complete"},
-            ExpressionAttributeValues={":V": {"N": "1"}},
-            UpdateExpression="SET #N = #N + :V",
+            ExpressionAttributeNames={"#SC": "segments-complete"},
+            ExpressionAttributeValues={":N": {"N": "1"}},
+            UpdateExpression="SET #SC = #SC + :N",
             ReturnValues="UPDATED_NEW"
         )
 
-        # Get segments complete
-        segments_complete = int(update["Attributes"]["segments-complete"]["N"])
+        # # Get segments complete
+        # segments_complete = int(update["Attributes"]["segments-complete"]["N"])
 
-        # All segments complete
-        if segments_complete == message["total-segments"]:
+        # # All segments complete
+        # if segments_complete == message["total-segments"]:
 
-            # Update status to complete
-            dynamodb.update_item(
-                TableName=backup_table,
-                Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-                ExpressionAttributeNames={"#N": "status"},
-                ExpressionAttributeValues={":V": {"S": COMPLETE}},
-                UpdateExpression="SET #N = :V"
-            )
+        #     # Update complete to true and stage to end
+        #     dynamodb.update_item(
+        #         TableName=backup_table,
+        #         Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
+        #         ExpressionAttributeNames={"#C": "complete", "#S": "stage"},
+        #         ExpressionAttributeValues={":T": {"BOOL": True},":E": {"S": END}},
+        #         UpdateExpression="SET #C = :T, #S = :E"
+        #     )
 
         # Print status message
         print(f'{message["key"]} {message["timestamp"]} segment {message["segment"]} complete')
