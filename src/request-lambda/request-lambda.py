@@ -50,7 +50,7 @@ def lambda_handler(event, context):
             "table-name":    {"S": message["table-name"]},
             "bucket-region": {"S": message["bucket-region"]},
             "bucket-name":   {"S": message["bucket-name"]},
-            "bucket-prefix": {"S": message["bucket-prefix"]},
+            "bucket-key":    {"S": message["bucket-key"]},
             "status":        {"S": RECEIVED}
         })
 
@@ -64,15 +64,15 @@ def lambda_handler(event, context):
     if message["action"] == "restore":
 
         # Build table key
-        message["key"] = "-".join([message["bucket-region"], message["bucket-name"], message["bucket-prefix"]])
+        message["key"] = "-".join([message["bucket-region"], message["bucket-name"], message["bucket-key"]])
 
         # Write entry to db
-        dynamodb.put_item(TableName=backup_table, Item={
+        dynamodb.put_item(TableName=restore_table, Item={
             "key":           {"S": message["key"]},
             "timestamp":     {"N": message["timestamp"]},
             "bucket-region": {"S": message["bucket-region"]},
             "bucket-name":   {"S": message["bucket-name"]},
-            "bucket-prefix": {"S": message["bucket-prefix"]},
+            "bucket-key":    {"S": message["bucket-key"]},
             "table-region":  {"S": message["table-region"]},
             "table-name":    {"S": message["table-name"]},
             "status":        {"S": RECEIVED}
