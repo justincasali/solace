@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "restore_table" {
-  name         = "${var.project}-${var.release}-restore-record"
+  name         = "${var.project}-${var.release}-restore-table"
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key  = "key"

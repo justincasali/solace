@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "backup_table" {
-  name         = "${var.project}-${var.release}-backup-record"
+  name         = "${var.project}-${var.release}-backup-table"
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key  = "key"
