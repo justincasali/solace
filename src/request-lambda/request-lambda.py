@@ -20,8 +20,11 @@ restore_queue = sqs.get_queue_url(QueueName=os.environ["RESTORE_QUEUE"])["QueueU
 # Dynamodb client
 dynamodb = session.create_client("dynamodb")
 
-# Status table
-status_table = os.environ["STATUS_TABLE"]
+# Backup table
+backup_table = os.environ["BACKUP_TABLE"]
+
+# Restore Table
+restore_table = os.environ["RESTORE_TABLE"]
 
 
 # Entry point
@@ -33,29 +36,26 @@ def lambda_handler(event, context):
     # Add timestamp to message
     message["timestamp"] = event["Records"][0]["attributes"]["SentTimestamp"]
 
-    # Write entry to db
-    dynamodb.put_item(TableName=status_table, Item={
-        "table-arn": {"S": message["table-arn"]},
-        "timestamp": {"N": message["timestamp"]},
-        "s3-arn":    {"S": message["s3-arn"]},
-        "action":    {"S": message["action"]},
-        "status":    {"S": RECEIVED}
-    })
-
     # Backup action
     if message["action"] == "backup":
 
+        # Build table key
+        message["key"] = "-".join([message["table-region"], message["table-name"]])
+
+        # Write entry to db
+        dynamodb.put_item(TableName=backup_table, Item={
+            "key":           {"S": message["key"]},
+            "timestamp":     {"N": message["timestamp"]},
+            "table-region":  {"S": message["table-region"]},
+            "table-name":    {"S": message["table-name"]},
+            "bucket-region": {"S": message["bucket-region"]},
+            "bucket-name":   {"S": message["bucket-name"]},
+            "bucket-prefix": {"S": message["bucket-prefix"]},
+            "status":        {"S": RECEIVED}
+        })
+
         # Send message
         sqs.send_message(QueueUrl=backup_queue, MessageBody=json.dumps(message))
-
-        # Update entry
-        dynamodb.update_item(
-            TableName=status_table,
-            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#N": "status"},
-            ExpressionAttributeValues={":V": {"S": QUEUED}},
-            UpdateExpression="SET #N = :V"
-        )
 
         # Complete
         return
@@ -63,17 +63,23 @@ def lambda_handler(event, context):
     # Restore action
     if message["action"] == "restore":
 
+        # Build table key
+        message["key"] = "-".join([message["bucket-region"], message["bucket-name"], message["bucket-prefix"]])
+
+        # Write entry to db
+        dynamodb.put_item(TableName=backup_table, Item={
+            "key":           {"S": message["key"]},
+            "timestamp":     {"N": message["timestamp"]},
+            "bucket-region": {"S": message["bucket-region"]},
+            "bucket-name":   {"S": message["bucket-name"]},
+            "bucket-prefix": {"S": message["bucket-prefix"]},
+            "table-region":  {"S": message["table-region"]},
+            "table-name":    {"S": message["table-name"]},
+            "status":        {"S": RECEIVED}
+        })
+
         # Send message
         sqs.send_message(QueueUrl=restore_queue, MessageBody=json.dumps(message))
-
-        # Update entry
-        dynamodb.update_item(
-            TableName=status_table,
-            Key={"table-arn": {"S": message["table-arn"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#N": "status"},
-            ExpressionAttributeValues={":V": {"S": QUEUED}},
-            UpdateExpression="SET #N = :V"
-        )
 
         # Complete
         return
