@@ -77,7 +77,7 @@ def lambda_handler(event, context):
         # Send message to queue
         sqs.send_message(QueueUrl=queue, MessageBody=json.dumps(message))
 
-    # Update status
+    # Update status to queued
     dynamodb.update_item(
         TableName=table,
         Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
