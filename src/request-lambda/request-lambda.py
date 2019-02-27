@@ -67,7 +67,7 @@ def lambda_handler(event, context):
         message["key"] = "-".join([message["bucket-region"], message["bucket-name"], message["bucket-prefix"]])
 
         # Write entry to db
-        dynamodb.put_item(TableName=backup_table, Item={
+        dynamodb.put_item(TableName=restore_table, Item={
             "key":           {"S": message["key"]},
             "timestamp":     {"N": message["timestamp"]},
             "bucket-region": {"S": message["bucket-region"]},
