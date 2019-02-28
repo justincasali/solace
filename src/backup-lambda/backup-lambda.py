@@ -4,7 +4,7 @@ import zlib
 import os
 
 # Stage constants
-RUN, END = "run", "end"
+TRANSFER, END = "transfer", "end"
 
 # AWS session
 session = botocore.session.get_session()
@@ -45,7 +45,7 @@ def lambda_handler(event, context):
             TableName=table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
             ExpressionAttributeNames={"#S": "stage"},
-            ExpressionAttributeValues={":R": {"S": RUN}},
+            ExpressionAttributeValues={":R": {"S": TRANSFER}},
             UpdateExpression="SET #S = :R"
         )
 
