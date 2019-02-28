@@ -34,6 +34,11 @@ variable "backup_timeout" {
   default     = 30
 }
 
+variable "backup_delay" {
+  description = "backup sqs delay seconds"
+  default     = 0
+}
+
 variable "restore_count" {
   description = "restore sqs max receive count"
   default     = 3
@@ -42,4 +47,9 @@ variable "restore_count" {
 variable "restore_timeout" {
   description = "restore lambda & sqs timeout"
   default     = 30
+}
+
+variable "restore_delay" {
+  description = "restore sqs delay seconds"
+  default     = 0
 }
