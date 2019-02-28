@@ -68,8 +68,8 @@ def lambda_handler(event, context):
         "complete-segments": {"N": "0"},
         "complete-batches":  {"N": "0"},
         "complete-items":    {"N": "0"},
-        "complete":          {"BOOL": False},
-        "failure":           {"BOOL": False},
+        # "complete":          {"BOOL": False},
+        # "failure":           {"BOOL": False},
         "stage":             {"S": REQUEST}
     })
 
