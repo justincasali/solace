@@ -15,23 +15,8 @@ variable "profile" {
 }
 
 variable "request_timeout" {
-  description = "request lambda and sqs timeout"
-  default     = 30
-}
-
-variable "backup_timeout" {
-  description = "backup lambda and sqs timeout"
-  default     = 30
-}
-
-variable "restore_timeout" {
-  description = "restore lambda and sqs timeout"
-  default     = 30
-}
-
-variable "request_count" {
-  description = "request sqs max receive count"
-  default     = 3
+  description = "request lambda & sqs timeout"
+  default     = 15
 }
 
 variable "backup_count" {
@@ -39,7 +24,17 @@ variable "backup_count" {
   default     = 3
 }
 
+variable "backup_timeout" {
+  description = "backup lambda & sqs timeout"
+  default     = 30
+}
+
 variable "restore_count" {
   description = "restore sqs max receive count"
   default     = 3
+}
+
+variable "restore_timeout" {
+  description = "restore lambda & sqs timeout"
+  default     = 30
 }
