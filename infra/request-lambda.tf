@@ -8,6 +8,14 @@ resource "aws_lambda_function" "request_lambda" {
   function_name = "${var.project}-${var.release}-request-lambda"
   role          = "${aws_iam_role.request_lambda_role.arn}"
 
+  depends_on = [
+    "aws_sqs_queue.request_queue",
+    "aws_sqs_queue.backup_queue",
+    "aws_sqs_queue.restore_queue",
+    "aws_dynamodb_table.backup_table",
+    "aws_dynamodb_table.restore_table",
+  ]
+
   filename         = "${data.archive_file.request_lambda_zip.output_path}"
   source_code_hash = "${data.archive_file.request_lambda_zip.output_base64sha256}"
 

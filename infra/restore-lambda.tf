@@ -8,6 +8,11 @@ resource "aws_lambda_function" "restore_lambda" {
   function_name = "${var.project}-${var.release}-restore-lambda"
   role          = "${aws_iam_role.restore_lambda_role.arn}"
 
+  depends_on = [
+    "aws_sqs_queue.restore_queue",
+    "aws_dynamodb_table.restore_table",
+  ]
+
   filename         = "${data.archive_file.restore_lambda_zip.output_path}"
   source_code_hash = "${data.archive_file.restore_lambda_zip.output_base64sha256}"
 
