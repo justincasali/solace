@@ -97,32 +97,22 @@ def lambda_handler(event, context):
     # Segment complete
     else:
 
-        # THIS NEEDS TO BE ATOMIC / NOT FAIL
-
-        # Increment segments complete
-        update = dynamodb.update_item(
+        # Increment complete segments, batches, & items
+        dynamodb.update_item(
             TableName=backup_table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#SC": "segments-complete"},
-            ExpressionAttributeValues={":N": {"N": "1"}},
-            UpdateExpression="SET #SC = #SC + :N",
-            ReturnValues="UPDATED_NEW"
+            ExpressionAttributeNames={
+                "#S": "complete-segments",
+                "#B": "complete-batches",
+                "#I": "complete-items"
+            },
+            ExpressionAttributeValues={
+                ":S": {"N": "1"},
+                ":B": {"N": str(message["batch"])},
+                ":I": {"N": str(message["count"])}
+            },
+            UpdateExpression="SET #S = #S + :S, #B = #B + :B, #I = #I + :I"
         )
-
-        # # Get segments complete
-        # segments_complete = int(update["Attributes"]["segments-complete"]["N"])
-
-        # # All segments complete
-        # if segments_complete == message["total-segments"]:
-
-        #     # Update complete to true and stage to end
-        #     dynamodb.update_item(
-        #         TableName=backup_table,
-        #         Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-        #         ExpressionAttributeNames={"#C": "complete", "#S": "stage"},
-        #         ExpressionAttributeValues={":T": {"BOOL": True},":E": {"S": END}},
-        #         UpdateExpression="SET #C = :T, #S = :E"
-        #     )
 
         # Print status message
         print(f'{message["key"]} {message["timestamp"]} segment {message["segment"]} complete')

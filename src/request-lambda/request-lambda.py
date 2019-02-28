@@ -65,7 +65,9 @@ def lambda_handler(event, context):
         "bucket-name":       {"S": message["bucket-name"]},
         "bucket-prefix":     {"S": message["bucket-prefix"]},
         "total-segments":    {"N": str(message["total-segments"])},
-        "segments-complete": {"N": "0"},
+        "complete-segments": {"N": "0"},
+        "complete-batches":  {"N": "0"},
+        "complete-items":    {"N": "0"},
         "complete":          {"BOOL": False},
         "failure":           {"BOOL": False},
         "stage":             {"S": REQUEST}
