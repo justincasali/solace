@@ -36,6 +36,10 @@ def lambda_handler(event, context):
     # Add timestamp to message
     message["timestamp"] = event["Records"][0]["attributes"]["SentTimestamp"]
 
+    # Ensure prefix ends with "/"
+    if message["bucket-prefix"][-1] != "/":
+        message["bucket-prefix"] += "/"
+
     # Backup vars
     if message["action"] == "backup":
 
@@ -54,10 +58,6 @@ def lambda_handler(event, context):
     if message["action"] != "backup" and message["action"] != "restore":
         raise Exception("invalid request action")
 
-
-    # Ensure prefix ends with "/"
-    if message["bucket-prefix"][-1] != "/":
-        message["bucket-prefix"] += "/"
 
     # Write entry to db
     dynamodb.put_item(TableName=table, Item={
