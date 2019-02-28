@@ -55,6 +55,10 @@ def lambda_handler(event, context):
         raise Exception("invalid request action")
 
 
+    # Ensure prefix ends with "/"
+    if message["bucket-prefix"][-1] != "/":
+        message["bucket-prefix"] += "/"
+
     # Write entry to db
     dynamodb.put_item(TableName=table, Item={
         "key":               {"S": message["key"]},
