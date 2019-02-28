@@ -21,6 +21,9 @@ dynamodb = session.create_client("dynamodb")
 # Backup table
 table = os.environ["BACKUP_TABLE"]
 
+# Zlib compression level
+compression_level = int(os.environ["COMPRESSION_LEVEL"])
+
 
 # Entry point
 def lambda_handler(event, context):
@@ -66,7 +69,7 @@ def lambda_handler(event, context):
     data = json.dumps(response["Items"], ensure_ascii=False).encode("utf-8")
 
     # Compress data using zlib
-    body = zlib.compress(data)
+    body = zlib.compress(data, level=compression_level)
 
     # Build s3 key
     key = "/".join([message["bucket-prefix"], hex(message["segment"]), hex(message["batch"])])

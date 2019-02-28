@@ -19,6 +19,11 @@ variable "request_timeout" {
   default     = 15
 }
 
+variable "compression_level" {
+  description = "zlib compression level, -1 is default compromise"
+  default     = -1
+}
+
 variable "backup_count" {
   description = "backup sqs max receive count"
   default     = 3

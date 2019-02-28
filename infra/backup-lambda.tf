@@ -17,8 +17,9 @@ resource "aws_lambda_function" "backup_lambda" {
 
   environment {
     variables {
-      BACKUP_QUEUE = "${aws_sqs_queue.backup_queue.name}"
-      BACKUP_TABLE = "${aws_dynamodb_table.backup_table.name}"
+      BACKUP_QUEUE      = "${aws_sqs_queue.backup_queue.name}"
+      BACKUP_TABLE      = "${aws_dynamodb_table.backup_table.name}"
+      COMPRESSION_LEVEL = "${var.compression_level}"
     }
   }
 }
