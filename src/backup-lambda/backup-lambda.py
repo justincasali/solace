@@ -92,7 +92,7 @@ def lambda_handler(event, context):
         message["exclusive-start-key"] = response["LastEvaluatedKey"]
 
         # Send updated message back to work
-        sqs.send_message(QueueUrl=queue, MessageBody=message)
+        sqs.send_message(QueueUrl=queue, MessageBody=json.dumps(message))
 
     # Segment complete
     else:
