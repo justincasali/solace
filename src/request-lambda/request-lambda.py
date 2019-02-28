@@ -45,14 +45,14 @@ def lambda_handler(event, context):
 
         # Set table and queue and build key
         table, queue = backup_table, backup_queue
-        message["key"] = "-".join([message["table-region"], message["table-name"]])
+        message["key"] = ":".join([message["table-region"], message["table-name"]])
 
     # Restore vars
     if message["action"] == "restore":
 
         # Set table and queue and build key
         table, queue = restore_table, restore_queue
-        message["key"] = "-".join([message["bucket-region"], message["bucket-name"], message["bucket-prefix"]])
+        message["key"] = ":".join([message["bucket-region"], message["bucket-name"], message["bucket-prefix"]])
 
     # Error on invalid action
     if message["action"] != "backup" and message["action"] != "restore":
