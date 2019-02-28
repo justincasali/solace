@@ -1,1 +1,1 @@
-parallel serverless cross-region dynamodb to s3 backup & restore tool
+serverless cross-region dynamodb to s3 backup restore tool
