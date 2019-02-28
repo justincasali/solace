@@ -13,13 +13,13 @@ session = botocore.session.get_session()
 sqs = session.create_client("sqs")
 
 # Backup queue url
-backup_queue = sqs.get_queue_url(QueueName=os.environ["BACKUP_QUEUE"])["QueueUrl"]
+queue = sqs.get_queue_url(QueueName=os.environ["BACKUP_QUEUE"])["QueueUrl"]
 
 # Dynamodb client
 dynamodb = session.create_client("dynamodb")
 
 # Backup table
-backup_table = os.environ["BACKUP_TABLE"]
+table = os.environ["BACKUP_TABLE"]
 
 
 # Entry point
@@ -42,7 +42,7 @@ def lambda_handler(event, context):
 
         # Update stage to run
         dynamodb.update_item(
-            TableName=backup_table,
+            TableName=table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
             ExpressionAttributeNames={"#S": "stage"},
             ExpressionAttributeValues={":R": {"S": RUN}},
@@ -92,14 +92,14 @@ def lambda_handler(event, context):
         message["exclusive-start-key"] = response["LastEvaluatedKey"]
 
         # Send updated message back to work
-        sqs.send_message(QueueUrl=backup_queue, MessageBody=message)
+        sqs.send_message(QueueUrl=queue, MessageBody=message)
 
     # Segment complete
     else:
 
         # Increment complete segments, batches, & items
         dynamodb.update_item(
-            TableName=backup_table,
+            TableName=table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
             ExpressionAttributeNames={
                 "#S": "complete-segments",
