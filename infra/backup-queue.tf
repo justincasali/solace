@@ -5,7 +5,7 @@ resource "aws_sqs_queue" "backup_queue" {
 
   redrive_policy = <<EOF
 {
-  "deadLetterTargetArn": "${aws_sqs_queue.graveyard_queue.arn}",
+  "deadLetterTargetArn": "${aws_sqs_queue.redrive_queue.arn}",
   "maxReceiveCount": ${var.backup_count}
 }
 EOF

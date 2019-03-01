@@ -24,8 +24,8 @@ variable "request_timeout" {
   default     = 15
 }
 
-variable "graveyard_timeout" {
-  description = "graveyard lambda & sqs timeout"
+variable "redrive_timeout" {
+  description = "redrive lambda & sqs timeout"
   default     = 15
 }
 
