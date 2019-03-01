@@ -33,6 +33,9 @@ def lambda_handler(event, context):
     # Load message from json
     message = json.loads(event["Records"][0]["body"])
 
+    # Add timestamp to message
+    message["timestamp"] = event["Records"][0]["attributes"]["SentTimestamp"]
+
     # Ensure prefix ends with "/"
     if message["bucket-prefix"][-1] != "/":
         message["bucket-prefix"] += "/"
