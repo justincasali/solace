@@ -26,7 +26,6 @@ resource "aws_lambda_function" "graveyard_lambda" {
 
   environment {
     variables {
-      GRAVEYARD_QUEUE = "${aws_sqs_queue.graveyard_queue.name}"
       BACKUP_TABLE    = "${aws_dynamodb_table.backup_table.name}"
       RESTORE_TABLE   = "${aws_dynamodb_table.restore_table.name}"
     }

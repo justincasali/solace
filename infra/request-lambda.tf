@@ -25,7 +25,6 @@ resource "aws_lambda_function" "request_lambda" {
 
   environment {
     variables {
-      REQUEST_QUEUE = "${aws_sqs_queue.request_queue.name}"
       BACKUP_QUEUE  = "${aws_sqs_queue.backup_queue.name}"
       RESTORE_QUEUE = "${aws_sqs_queue.restore_queue.name}"
       BACKUP_TABLE  = "${aws_dynamodb_table.backup_table.name}"
