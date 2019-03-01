@@ -5,12 +5,8 @@ resource "aws_sqs_queue" "restore_queue" {
 
   redrive_policy = <<EOF
 {
-  "deadLetterTargetArn": "${aws_sqs_queue.restore_dead_letter_queue.arn}",
+  "deadLetterTargetArn": "${aws_sqs_queue.graveyard_queue.arn}",
   "maxReceiveCount": ${var.restore_count}
 }
 EOF
-}
-
-resource "aws_sqs_queue" "restore_dead_letter_queue" {
-  name = "${var.project}-${var.release}-restore-dead-letter-queue"
 }

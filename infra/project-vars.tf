@@ -14,14 +14,19 @@ variable "profile" {
   description = "aws credential profile"
 }
 
+variable "compression_level" {
+  description = "zlib compression level, -1 is default compromise"
+  default     = -1
+}
+
 variable "request_timeout" {
   description = "request lambda & sqs timeout"
   default     = 15
 }
 
-variable "compression_level" {
-  description = "zlib compression level, -1 is default compromise"
-  default     = -1
+variable "graveyard_timeout" {
+  description = "graveyard lambda & sqs timeout"
+  default     = 15
 }
 
 variable "backup_count" {
