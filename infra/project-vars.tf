@@ -31,7 +31,7 @@ variable "redrive_timeout" {
 
 variable "backup_count" {
   description = "backup sqs max receive count"
-  default     = 3
+  default     = 5
 }
 
 variable "backup_timeout" {
@@ -46,7 +46,7 @@ variable "backup_delay" {
 
 variable "restore_count" {
   description = "restore sqs max receive count"
-  default     = 3
+  default     = 5
 }
 
 variable "restore_timeout" {
