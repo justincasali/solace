@@ -15,12 +15,12 @@ variable "profile" {
 }
 
 variable "max_segments" {
-  description = "maximum segments & concurrent lambdas per task"
+  description = "maximum segments permitted per task"
   default     = 64
 }
 
 variable "compression_level" {
-  description = "zlib compression level, -1 is default compromise"
+  description = "zlib compression level"
   default     = -1
 }
 
@@ -34,7 +34,7 @@ variable "redrive_timeout" {
   default     = 15
 }
 
-variable "backup_count" {
+variable "backup_attempts" {
   description = "backup sqs max receive count"
   default     = 3
 }
@@ -49,7 +49,7 @@ variable "backup_delay" {
   default     = 0
 }
 
-variable "restore_count" {
+variable "restore_attempts" {
   description = "restore sqs max receive count"
   default     = 3
 }
