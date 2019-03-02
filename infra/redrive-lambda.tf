@@ -9,9 +9,6 @@ resource "aws_lambda_function" "redrive_lambda" {
   role          = "${aws_iam_role.redrive_lambda_role.arn}"
 
   depends_on = [
-    "aws_sqs_queue.request_queue",
-    "aws_sqs_queue.backup_queue",
-    "aws_sqs_queue.restore_queue",
     "aws_sqs_queue.redrive_queue",
     "aws_dynamodb_table.backup_table",
     "aws_dynamodb_table.restore_table",
