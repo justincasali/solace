@@ -105,9 +105,9 @@ def lambda_handler(event, context):
             TableName=table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
             ExpressionAttributeNames={
-                "#S": "complete-segments",
-                "#B": "complete-batches",
-                "#I": "complete-items"
+                "#S": "completed-segments",
+                "#B": "batch-count",
+                "#I": "item-count"
             },
             ExpressionAttributeValues={
                 ":S": {"N": "1"},
