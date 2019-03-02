@@ -1,7 +1,7 @@
 data "archive_file" "restore_lambda_zip" {
   type        = "zip"
   source_dir  = "${path.root}/../src/restore-lambda"
-  output_path = "${path.root}/../artifact/restore-lambda.zip"
+  output_path = "${path.root}/../archive/restore-lambda.zip"
 }
 
 resource "aws_lambda_function" "restore_lambda" {
