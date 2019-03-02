@@ -131,7 +131,7 @@ def lambda_handler(event, context):
     # Segment complete
     else:
 
-        # Increment complete segments, batches, & items
+        # Increment completed segments, batches, & items
         dynamodb.update_item(
             TableName=table,
             Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
