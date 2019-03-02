@@ -57,4 +57,4 @@ def lambda_handler(event, context):
 
 
     # Print status message
-    print(f'{message["key"]}@{message["timestamp"]} segment {message["segment"]} failed')
+    print(f'{message["key"]} {message["timestamp"]} segment {message["segment"]} failed')
