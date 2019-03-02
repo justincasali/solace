@@ -61,38 +61,55 @@ def lambda_handler(event, context):
 
     # Write entry to db
     dynamodb.put_item(TableName=table, Item={
-        "key":               {"S": message["key"]},
-        "timestamp":         {"N": message["timestamp"]},
-        "table-region":      {"S": message["table-region"]},
-        "table-name":        {"S": message["table-name"]},
-        "bucket-region":     {"S": message["bucket-region"]},
-        "bucket-name":       {"S": message["bucket-name"]},
-        "bucket-prefix":     {"S": message["bucket-prefix"]},
-        "total-segments":    {"N": str(message["total-segments"])},
-        "complete-segments": {"N": "0"},
-        "complete-batches":  {"N": "0"},
-        "complete-items":    {"N": "0"},
-        "failure":           {"BOOL": False},
-        "stage":             {"S": REQUEST}
+        "key":                {"S": message["key"]},
+        "timestamp":          {"N": message["timestamp"]},
+        "table-region":       {"S": message["table-region"]},
+        "table-name":         {"S": message["table-name"]},
+        "bucket-region":      {"S": message["bucket-region"]},
+        "bucket-name":        {"S": message["bucket-name"]},
+        "bucket-prefix":      {"S": message["bucket-prefix"]},
+        "total-segments":     {"N": str(message["total-segments"])},
+        "completed-segments": {"N": "0"},
+        "failed-segments":    {"N": "0"},
+        "batch-count":        {"N": "0"},
+        "item-count":         {"N": "0"},
+        "stage":              {"S": REQUEST}
     })
 
-    # Seed queue
-    for segment in range(message["total-segments"]):
+    # Attempt to send messages to queue
+    try:
+        # Seed queue
+        for segment in range(message["total-segments"]):
 
-        # Set message segment
-        message["segment"] = segment
+            # Set message segment
+            message["segment"] = segment
 
-        # Send message to queue
-        sqs.send_message(QueueUrl=queue, MessageBody=json.dumps(message))
+            # Send message to queue
+            sqs.send_message(QueueUrl=queue, MessageBody=json.dumps(message))
 
-    # Update stage to queue
-    dynamodb.update_item(
-        TableName=table,
-        Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-        ExpressionAttributeNames={"#S": "stage"},
-        ExpressionAttributeValues={":Q": {"S": QUEUE}},
-        UpdateExpression="SET #S = :Q"
-    )
+    # On failure rollback
+    except:
+
+        # Remove entry from db
+        dynamodb.delete_item(
+            TableName=table,
+            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}}
+        )
+
+        # Throw caught error
+        raise
+
+    # On success continue
+    else:
+
+        # Update stage to queue
+        dynamodb.update_item(
+            TableName=table,
+            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
+            ExpressionAttributeNames={"#S": "stage"},
+            ExpressionAttributeValues={":Q": {"S": QUEUE}},
+            UpdateExpression="SET #S = :Q"
+        )
 
 
     # Print status message
