@@ -14,6 +14,11 @@ variable "profile" {
   description = "aws credential profile"
 }
 
+variable "max_segments" {
+  description = "maximum segments & concurrent lambdas per task"
+  default     = 64
+}
+
 variable "compression_level" {
   description = "zlib compression level, -1 is default compromise"
   default     = -1

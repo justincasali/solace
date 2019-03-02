@@ -29,6 +29,7 @@ resource "aws_lambda_function" "request_lambda" {
       RESTORE_QUEUE = "${aws_sqs_queue.restore_queue.name}"
       BACKUP_TABLE  = "${aws_dynamodb_table.backup_table.name}"
       RESTORE_TABLE = "${aws_dynamodb_table.restore_table.name}"
+      MAX_SEGMENTS  = "${var.max_segments}"
     }
   }
 }

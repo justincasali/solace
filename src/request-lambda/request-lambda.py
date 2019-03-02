@@ -23,9 +23,11 @@ dynamodb = session.create_client("dynamodb")
 # Backup table
 backup_table = os.environ["BACKUP_TABLE"]
 
-# Restore Table
+# Restore table
 restore_table = os.environ["RESTORE_TABLE"]
 
+# Max segments
+max_segments = int(os.environ["MAX_SEGMENTS"])
 
 # Entry point
 def lambda_handler(event, context):
@@ -56,7 +58,11 @@ def lambda_handler(event, context):
 
     # Error on invalid action
     if message["action"] != "backup" and message["action"] != "restore":
-        raise Exception("invalid request action")
+        raise Exception(f'invalid request action "{message["action"]}"')
+
+    # Reject task with too many segments
+    if int(message["total-segments"]) > max_segments:
+        raise Exception(f'too many segments, {message["total-segments"]} > {str(max_segments)}')
 
 
     # Write entry to db
