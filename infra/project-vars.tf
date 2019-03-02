@@ -15,7 +15,7 @@ variable "profile" {
 }
 
 variable "max_segments" {
-  description = "maximum segments per task"
+  description = "maximum segments allowed per task"
   default     = 64
 }
 
