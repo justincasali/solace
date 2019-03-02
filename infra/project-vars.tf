@@ -19,21 +19,6 @@ variable "max_segments" {
   default     = 64
 }
 
-variable "compression_level" {
-  description = "zlib compression level"
-  default     = -1
-}
-
-variable "request_timeout" {
-  description = "request lambda & sqs timeout"
-  default     = 15
-}
-
-variable "redrive_timeout" {
-  description = "redrive lambda & sqs timeout"
-  default     = 15
-}
-
 variable "backup_attempts" {
   description = "backup sqs max receive count"
   default     = 3
@@ -62,4 +47,19 @@ variable "restore_timeout" {
 variable "restore_delay" {
   description = "restore sqs delay seconds"
   default     = 0
+}
+
+variable "compression_level" {
+  description = "zlib compression level"
+  default     = -1
+}
+
+variable "request_timeout" {
+  description = "request lambda & sqs timeout"
+  default     = 15
+}
+
+variable "redrive_timeout" {
+  description = "redrive lambda & sqs timeout"
+  default     = 15
 }
