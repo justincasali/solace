@@ -1,5 +1,5 @@
 resource "aws_iam_role" "redrive_lambda_role" {
-  name               = "${var.project}-${var.release}-redrive-lambda-role"
+  name               = "${local.project}-${var.release}-redrive-lambda-role"
   assume_role_policy = "${data.aws_iam_policy_document.redrive_lambda_sts_policy.json}"
 }
 

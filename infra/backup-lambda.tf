@@ -5,7 +5,7 @@ data "archive_file" "backup_lambda_zip" {
 }
 
 resource "aws_lambda_function" "backup_lambda" {
-  function_name = "${var.project}-${var.release}-backup-lambda"
+  function_name = "${local.project}-${var.release}-backup-lambda"
   role          = "${aws_iam_role.backup_lambda_role.arn}"
 
   depends_on = [

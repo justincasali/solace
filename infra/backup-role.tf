@@ -1,5 +1,5 @@
 resource "aws_iam_role" "backup_lambda_role" {
-  name               = "${var.project}-${var.release}-backup-lambda-role"
+  name               = "${local.project}-${var.release}-backup-lambda-role"
   assume_role_policy = "${data.aws_iam_policy_document.backup_lambda_sts_policy.json}"
 }
 

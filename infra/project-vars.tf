@@ -1,7 +1,3 @@
-variable "project" {
-  description = "project name"
-}
-
 variable "release" {
   description = "project release"
 }
