@@ -4,7 +4,7 @@ import zlib
 import os
 
 # Stage constants
-TRANSFER, END = "transfer", "end"
+TRANSFER = "transfer"
 
 # AWS session
 session = botocore.session.get_session()
