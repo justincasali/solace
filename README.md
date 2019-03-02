@@ -1,21 +1,49 @@
+# solace
 serverless cross-region dynamodb to s3 backup restore tool
+
+## use
+send message to `request-queue` with the following format
 
 ```
 message = {
-
-    action: "backup" | "restore"
-    
-    total-segments: integer < max-segments
-    
-    table-region: aws region string
-    
-    table-name: string
-    
-    bucket-region: aws region string
-    
-    bucket-name: string
-    
-    bucket-prefix: string
-    
+    "action":           backup or restore,
+    "total-segments":   integer less than or equal to maximum segments,
+    "table-region":     dynamodb region string,
+    "table-name":       dynamodb table name,
+    "bucket-region":    s3 region string,
+    "bucket-name":      s3 bucket name,
+    "bucket-prefix":    s3 directory for backup
 }
 ```
+
+check backup status with the `backup-table`
+
+check restore status with the `restore-table`
+
+## setup
+### config
+### deploy
+
+## infra
+### sqs
+### lambda
+### dynamodb
+### iam
+
+## data schema
+```
+bucket/prefix/segment/batch
+```
+batch is zlib compressed json of dynamodb entries
+
+## monitoring
+- watch `redrive_queue` invocations, this reflects backup/restore segment failures
+- watch `request_queue` errors, this reflects bad requests
+
+## limitations
+- currently no way to kill a backup/restore task once it starts
+- lambda default concurrent execution limit of 1000
+- backup is not point in time but _range_ in time
+
+## future features
+- cross-account functionality
