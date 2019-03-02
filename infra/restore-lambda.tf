@@ -18,7 +18,7 @@ resource "aws_lambda_function" "restore_lambda" {
 
   runtime = "python3.7"
   handler = "restore-lambda.lambda_handler"
-  timeout = "${var.restore_task["timeout"]}"
+  timeout = "${var.restore_queue["timeout"]}"
 
   environment {
     variables {

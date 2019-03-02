@@ -28,7 +28,7 @@ variable "request_timeout" {
   default = 15
 }
 
-variable "backup_task" {
+variable "backup_queue" {
   type = "map"
 
   default = {
@@ -38,7 +38,7 @@ variable "backup_task" {
   }
 }
 
-variable "restore_task" {
+variable "restore_queue" {
   type = "map"
 
   default = {
