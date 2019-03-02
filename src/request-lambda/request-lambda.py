@@ -48,9 +48,8 @@ def lambda_handler(event, context):
     # Add timestamp to message
     message["timestamp"] = event["Records"][0]["attributes"]["SentTimestamp"]
 
-    # Ensure prefix ends with "/"
-    if message["bucket-prefix"][-1] != "/":
-        message["bucket-prefix"] += "/"
+    # Strip trailing "/" from prefix
+    message["bucket-prefix"] = message["bucket-prefix"].rstrip("/")
 
     # Backup vars
     if message["action"] == "backup":

@@ -72,7 +72,7 @@ def lambda_handler(event, context):
     body = zlib.compress(data, level=compression_level)
 
     # Build s3 key
-    key = message["bucket-prefix"] + hex(message["segment"]) + "/" + hex(message["batch"])
+    key = "/".join([message["bucket-prefix"], hex(message["segment"]), hex(message["batch"])])
 
     # Write batch to s3
     remote_s3.put_object(

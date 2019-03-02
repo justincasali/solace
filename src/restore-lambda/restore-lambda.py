@@ -52,18 +52,18 @@ def lambda_handler(event, context):
             UpdateExpression="SET #S = :R"
         )
 
-    # Build segment prefix
-    segment_prefix = message["bucket-prefix"] + hex(message["segment"]) + "/"
+    # Build segment specific prefix
+    prefix = "/".join([message["bucket-prefix"], hex(message["segment"]), ""])
 
     # Get key under prefix (one per run)
     list_response = remote_s3.list_objects_v2(
         Bucket=message["bucket-name"],
-        Prefix=segment_prefix,
+        Prefix=prefix,
         ContinuationToken=message["continuation-token"],
         MaxKeys=1,
     ) if "continuation-token" in message else remote_s3.list_objects_v2(
         Bucket=message["bucket-name"],
-        Prefix=segment_prefix,
+        Prefix=prefix,
         MaxKeys=1
     )
 
