@@ -98,14 +98,11 @@ def lambda_handler(event, context):
         # Item subset
         subset = items[BATCH_SIZE*batch:BATCH_SIZE*(batch+1)]
 
-        # Build request items parameter
-        request_items = {
-            message["table-name"]: [{"PutRequest": {"Item": item}} for item in subset]
-        }
-
         # Batch write to dynamo table
         write_response = remote_dynamodb.batch_write_item(
-            RequestItems=request_items
+            RequestItems={
+                message["table-name"]: [{"PutRequest": {"Item": item}} for item in subset]
+            }
         )
 
         # Throw error if items were not written
