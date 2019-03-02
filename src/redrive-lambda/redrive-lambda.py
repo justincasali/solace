@@ -24,6 +24,12 @@ restore_table = os.environ["RESTORE_TABLE"]
 # Entry point
 def lambda_handler(event, context):
 
+    # Delete message from queue (will not requeue on error)
+    sqs.delete_message(
+        QueueUrl=redrive_queue,
+        ReceiptHandle=event["Records"][0]["receiptHandle"]
+    )
+
     # Load message from json
     message = json.loads(event["Records"][0]["body"])
 
