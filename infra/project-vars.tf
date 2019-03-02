@@ -15,16 +15,20 @@ variable "profile" {
 }
 
 variable "max_segments" {
-  description = "maximum segments per task"
+  description = "maximum segments & concurrent lambdas per task"
   default     = 64
 }
 
 variable "compression_level" {
-  description = "zlib compression level"
+  description = "zlib compression level, -1 is default compromise"
   default     = -1
 }
 
 variable "request_timeout" {
+  default = 15
+}
+
+variable "redrive_timeout" {
   default = 15
 }
 
@@ -46,8 +50,4 @@ variable "restore_queue" {
     timeout = 30
     delay   = 0
   }
-}
-
-variable "redrive_timeout" {
-  default = 15
 }
