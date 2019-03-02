@@ -3,8 +3,6 @@ resource "aws_sqs_queue" "backup_queue" {
   visibility_timeout_seconds = "${var.backup_timeout}"
   delay_seconds              = "${var.backup_delay}"
 
-  depends_on = ["aws_sqs_queue.redrive_queue"]
-
   redrive_policy = <<EOF
 {
   "deadLetterTargetArn": "${aws_sqs_queue.redrive_queue.arn}",
