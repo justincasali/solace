@@ -22,8 +22,8 @@ resource "aws_lambda_function" "restore_lambda" {
 
   environment {
     variables {
-      RESTORE_QUEUE = "${aws_sqs_queue.restore_queue.name}"
-      RESTORE_TABLE = "${aws_dynamodb_table.restore_table.name}"
+      RESTORE_QUEUE = "${aws_sqs_queue.restore_queue.id}"
+      RESTORE_TABLE = "${aws_dynamodb_table.restore_table.id}"
     }
   }
 }

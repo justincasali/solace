@@ -26,8 +26,9 @@ resource "aws_lambda_function" "redrive_lambda" {
 
   environment {
     variables {
-      BACKUP_TABLE  = "${aws_dynamodb_table.backup_table.name}"
-      RESTORE_TABLE = "${aws_dynamodb_table.restore_table.name}"
+      REDRIVE_QUEUE = "${aws_sqs_queue.redrive_queue.id}"
+      BACKUP_TABLE  = "${aws_dynamodb_table.backup_table.id}"
+      RESTORE_TABLE = "${aws_dynamodb_table.restore_table.id}"
     }
   }
 }
