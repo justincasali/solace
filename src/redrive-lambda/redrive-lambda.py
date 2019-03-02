@@ -5,6 +5,12 @@ import os
 # AWS session
 session = botocore.session.get_session()
 
+# Sqs client
+sqs = session.create_client("sqs")
+
+# Redrive queue
+redrive_queue = os.environ["REDRIVE_QUEUE"]
+
 # Dynamodb client
 dynamodb = session.create_client("dynamodb")
 

@@ -11,11 +11,14 @@ session = botocore.session.get_session()
 # Sqs client
 sqs = session.create_client("sqs")
 
-# Backup queue url
-backup_queue = sqs.get_queue_url(QueueName=os.environ["BACKUP_QUEUE"])["QueueUrl"]
+# Request queue
+request_queue = os.environ["REQUEST_QUEUE"]
 
-# Restore queue url
-restore_queue = sqs.get_queue_url(QueueName=os.environ["RESTORE_QUEUE"])["QueueUrl"]
+# Backup queue
+backup_queue = os.environ["BACKUP_QUEUE"]
+
+# Restore queue
+restore_queue = os.environ["RESTORE_QUEUE"]
 
 # Dynamodb client
 dynamodb = session.create_client("dynamodb")
@@ -28,6 +31,7 @@ restore_table = os.environ["RESTORE_TABLE"]
 
 # Max segments
 max_segments = int(os.environ["MAX_SEGMENTS"])
+
 
 # Entry point
 def lambda_handler(event, context):

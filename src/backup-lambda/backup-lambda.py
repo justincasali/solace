@@ -12,8 +12,8 @@ session = botocore.session.get_session()
 # Sqs client
 sqs = session.create_client("sqs")
 
-# Backup queue url
-queue = sqs.get_queue_url(QueueName=os.environ["BACKUP_QUEUE"])["QueueUrl"]
+# Backup queue
+queue = os.environ["BACKUP_QUEUE"]
 
 # Dynamodb client
 dynamodb = session.create_client("dynamodb")
