@@ -1,7 +1,7 @@
 data "archive_file" "request_lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/../src/request-lambda"
-  output_path = "${path.module}/../artifact/request-lambda.zip"
+  source_dir  = "${path.root}/../src/request-lambda"
+  output_path = "${path.root}/../artifact/request-lambda.zip"
 }
 
 resource "aws_lambda_function" "request_lambda" {

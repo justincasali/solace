@@ -1,7 +1,7 @@
 data "archive_file" "redrive_lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/../src/redrive-lambda"
-  output_path = "${path.module}/../artifact/redrive-lambda.zip"
+  source_dir  = "${path.root}/../src/redrive-lambda"
+  output_path = "${path.root}/../artifact/redrive-lambda.zip"
 }
 
 resource "aws_lambda_function" "redrive_lambda" {
