@@ -36,7 +36,7 @@ variable "backup_count" {
 
 variable "backup_timeout" {
   description = "backup lambda & sqs timeout"
-  default     = 30
+  default     = 60
 }
 
 variable "backup_delay" {
@@ -51,7 +51,7 @@ variable "restore_count" {
 
 variable "restore_timeout" {
   description = "restore lambda & sqs timeout"
-  default     = 30
+  default     = 60
 }
 
 variable "restore_delay" {
