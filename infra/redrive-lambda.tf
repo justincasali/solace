@@ -5,7 +5,7 @@ data "archive_file" "redrive_lambda_zip" {
 }
 
 resource "aws_lambda_function" "redrive_lambda" {
-  function_name = "${local.project}-${var.release}-redrive-lambda"
+  function_name = "${local.project}-${var.env}-redrive-lambda"
   role          = "${aws_iam_role.redrive_lambda_role.arn}"
 
   depends_on = [

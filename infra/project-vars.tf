@@ -1,5 +1,5 @@
-variable "release" {
-  description = "project release"
+variable "env" {
+  description = "project environment"
 }
 
 variable "region" {
