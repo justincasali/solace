@@ -18,7 +18,7 @@ resource "aws_lambda_function" "backup_lambda" {
 
   runtime = "python3.7"
   handler = "backup-lambda.lambda_handler"
-  timeout = "${var.backup_timeout}"
+  timeout = "${var.backup_queue["timeout"]}"
 
   environment {
     variables {
