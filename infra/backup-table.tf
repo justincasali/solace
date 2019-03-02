@@ -3,7 +3,7 @@ resource "aws_dynamodb_table" "backup_table" {
     prevent_destroy = true
   }
 
-  name         = "${local.project}-${var.env}-backup-table"
+  name         = "${local.prefix}-backup-table"
   billing_mode = "PAY_PER_REQUEST"
 
   hash_key  = "key"

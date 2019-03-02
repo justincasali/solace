@@ -1,5 +1,5 @@
 resource "aws_iam_role" "restore_lambda_role" {
-  name               = "${local.project}-${var.env}-restore-lambda-role"
+  name               = "${local.prefix}-restore-lambda-role"
   assume_role_policy = "${data.aws_iam_policy_document.restore_lambda_sts_policy.json}"
 }
 

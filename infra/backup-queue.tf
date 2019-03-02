@@ -1,5 +1,5 @@
 resource "aws_sqs_queue" "backup_queue" {
-  name                       = "${local.project}-${var.env}-backup-queue"
+  name                       = "${local.prefix}-backup-queue"
   visibility_timeout_seconds = "${var.backup_timeout}"
   delay_seconds              = "${var.backup_delay}"
 
