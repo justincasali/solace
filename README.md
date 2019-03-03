@@ -4,7 +4,7 @@ serverless cross-region dynamodb to s3 backup restore tool
 ## use
 this program does what you tell it to do, and just that
 
-backup up to existing bucket-prefix will result in conflated backup data
+backuping up to an existing bucket-prefix will result in conflated backup data
 
 restoring onto table with existing data will result in conflated table entries
 
