@@ -24,7 +24,7 @@ message = {
 
 ## status
 check backup status with the `backup-table` and restore status with the `restore-table`
-* complete: `completed-segments` + `failed-segments` == `total-segments`
+* done: `completed-segments` + `failed-segments` == `total-segments`
 * succeeded: `completed-segments` == `total-segments`
 * failed: `failed-segments` > 0
 
