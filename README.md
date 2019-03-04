@@ -1,12 +1,19 @@
-# solace
+# Solace
 serverless cross-region dynamodb to s3 backup restore tool
 
 ## use
+
+### preface
+
 this program does what you tell it to do and just that, it's a nitty gritty backend 
 
 backuping up to an existing bucket-prefix will result in conflated backup data
 
 restoring onto table with existing data will result in conflated table entries
+
+bad inputs will do bad things, write custom request builder function to suit use case
+
+### request message
 
 send message to `request-queue` with the following format
 
@@ -24,9 +31,9 @@ message = {
 
 ## status
 check backup status with the `backup-table` and restore status with the `restore-table`
-* done: `completed-segments` + `failed-segments` == `total-segments`
-* succeeded: `completed-segments` == `total-segments`
-* failed: `failed-segments` > 0
+* `done: completed-segments + failed-segments == total-segments`
+* `succeeded: completed-segments == total-segments`
+* `failed: failed-segments > 0`
 
 ## setup
 ### config
