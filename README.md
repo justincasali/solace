@@ -43,6 +43,7 @@ bucket/prefix/segment/batch
 batch is zlib compressed json of dynamodb entries
 
 ## monitoring
+- in normal operation it's permitted for the backup/restore lambdas to fail
 - watch `redrive_queue` invocations, this reflects backup/restore segment failures
 - watch `request_queue` errors, this reflects bad requests
 
