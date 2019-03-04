@@ -22,9 +22,11 @@ message = {
 }
 ```
 
-check backup status with the `backup-table`
-
-check restore status with the `restore-table`
+## status
+check backup status with the `backup-table` and restore status with the `restore-table`
+* complete: `completed-segments` + `failed-segments` == `total-segments`
+* succeeded: `completed-segments` == `total-segments`
+* failed: `failed-segments` > 0
 
 ## setup
 ### config
