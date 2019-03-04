@@ -2,7 +2,7 @@
 serverless cross-region dynamodb to s3 backup restore tool
 
 ## use
-this program does what you tell it to do, and just that
+this program does what you tell it to do and just that, it's a nitty gritty backend 
 
 backuping up to an existing bucket-prefix will result in conflated backup data
 
