@@ -3,13 +3,13 @@ Serverless cross-region DynamoDB S3 backup restore tool.
 
 ### Preface
 
-This program does what you tell it to do and just that, it's a nitty gritty backend.
+This program does what you tell it to do and just that, it's a nitty gritty backup/restore engine.
 
 Backing up to an existing bucket-prefix will result in conflated backup data.
 
 Restoring onto a table with existing data will result in conflated table entries.
 
-Bad inputs will do bad things, send requests programmatically or wrap tool with a user friendly api.
+Bad inputs will do bad things, send requests programmatically or wrap tool with user friendly interface.
 
 ## Use
 
@@ -82,6 +82,8 @@ terraform apply -var-file 'config/<var-file>.tfvars' infra/
 ### Lambda
 ### DynamoDB
 ### IAM
+
+Backup/Restore roles currently have blanket access to DynamoDB & S3 and must be refined
 
 ## Data Schema
 
