@@ -29,7 +29,7 @@ Send a message to the `request-queue` with the following format:
 }
 ```
 
-### Action
+### action
 
 Action for the tool to preform, `backup` or `restore`.
 
@@ -102,5 +102,5 @@ Segments and batches are `0x` prefixed hex values.
 
 ## Limitations
 - Currently no way to kill a backup/restore task once it starts.
-- Lambda default concurrent execution limit of 1000.
+- Lambda default concurrent execution limit of 1000 per backup/restore task.
 - Backup is not point in time but _range_ in time.
