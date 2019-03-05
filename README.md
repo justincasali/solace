@@ -1,5 +1,5 @@
 # Solace v3
-Serverless cross-region dynamodb to s3 backup restore tool.
+Serverless cross-region DynamoDB to S3 backup restore tool.
 
 ### Preface
 
@@ -39,7 +39,7 @@ Segments backup data is split into. Each segment runs independently allowing a t
 
 With backups this value is chosen by the operator. 1 segment per TB of data is recommended.
 
-With restores this value must match the `total-segments` the data was backup with.
+With restores this value must match the `total-segments` the data was backuped with.
 
 ### table-region & table-name
 
@@ -51,7 +51,7 @@ S3 region and bucket name. With `backup` this is the destination and with `resto
 
 ### bucket-prefix
 
-Location of data within s3, stored under the prefix path. Be sure to change this every backup to avoid mixing data. Try using a two part prefix like `table-name/timestamp/`.
+Location of data within S3, stored under the prefix path. Be sure to change this every backup to avoid conflating data. Try using a two part prefix like `table-name/timestamp/`.
 
 
 ## Status
@@ -73,12 +73,11 @@ Create `.tfvars` files within the `config/` directory to configure the infra and
 ### Deploy
 
 ```
-# in root dir
 terraform init -backend-config 'config/<backend-file>.tfvars' infra/
 terraform apply -var-file 'config/<var-file>.tfvars' infra/
 ```
 
-## Infra
+## Infra (working on docs)
 ### SQS
 ### Lambda
 ### DynamoDB
@@ -90,7 +89,7 @@ terraform apply -var-file 'config/<var-file>.tfvars' infra/
 bucket/prefix/segment/batch
 ```
 
-Batch is zlib compressed json dump of dynamodb entries.
+Batch is zlib compressed json dump of DynamoDB entries.
 
 Segments and batches are `0x` prefixed hex values.
 
@@ -103,4 +102,4 @@ Segments and batches are `0x` prefixed hex values.
 ## Limitations
 - Currently no way to kill a backup/restore task once it starts.
 - Lambda default concurrent execution limit of 1000 per backup/restore task.
-- Backup is not point in time but _range_ in time.
+- Backup is not point in time but _range_ in time, fits with DynamoDB's eventually consistent nature.
