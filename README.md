@@ -18,7 +18,7 @@ Bad inputs will do bad things, send requests programmatically or wrap tool with 
 Send a message to the `request-queue` with the following format:
 
 ```
-message = {
+{
     "action":           backup or restore,
     "total-segments":   integer less than or equal to maximum_segments,
     "table-region":     dynamodb region string,
