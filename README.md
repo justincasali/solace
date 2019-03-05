@@ -1,4 +1,4 @@
-# Solace
+# solace-v3 🏝
 Serverless cross-region DynamoDB to S3 backup restore tool.
 
 ### Preface
