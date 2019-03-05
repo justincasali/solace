@@ -3,9 +3,6 @@ import json
 import zlib
 import os
 
-# Stage constants
-TRANSFER = "transfer"
-
 # AWS session
 session = botocore.session.get_session()
 
@@ -37,21 +34,11 @@ def lambda_handler(event, context):
     # Remote s3 client
     remote_s3 = session.create_client("s3", region_name=message["bucket-region"])
 
-    # Init stage
+    # Init
     if "exclusive-start-key" not in message:
 
         # Setup vars
         message["batch"], message["count"] = 0, 0
-
-        # Update stage to run
-        dynamodb.update_item(
-            TableName=table,
-            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#S": "stage"},
-            ExpressionAttributeValues={":R": {"S": TRANSFER}},
-            UpdateExpression="SET #S = :R"
-        )
-
 
     # Scan source table, up to 1 MB of items
     response = remote_dynamodb.scan(

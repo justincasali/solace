@@ -2,9 +2,6 @@ import botocore.session
 import json
 import os
 
-# Stage constants
-REQUEST, QUEUE = "request", "queue"
-
 # AWS session
 session = botocore.session.get_session()
 
@@ -73,7 +70,6 @@ def lambda_handler(event, context):
     if int(message["total-segments"]) > max_segments:
         raise Exception(f'too many segments, {message["total-segments"]} > {str(max_segments)}')
 
-
     # Write entry to db
     dynamodb.put_item(TableName=table, Item={
         "key":                 {"S": message["key"]},
@@ -87,8 +83,7 @@ def lambda_handler(event, context):
         "completed-segments":  {"N": "0"},
         "failed-segments":     {"N": "0"},
         "transferred-batches": {"N": "0"},
-        "transferred-items":   {"N": "0"},
-        "stage":               {"S": REQUEST}
+        "transferred-items":   {"N": "0"}
     })
 
     # Attempt to send messages to queue
@@ -113,19 +108,6 @@ def lambda_handler(event, context):
 
         # Throw caught error
         raise
-
-    # On success continue
-    else:
-
-        # Update stage to queue
-        dynamodb.update_item(
-            TableName=table,
-            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#S": "stage"},
-            ExpressionAttributeValues={":Q": {"S": QUEUE}},
-            UpdateExpression="SET #S = :Q"
-        )
-
 
     # Print status message
     print(f'sent {message["key"]} {message["timestamp"]} to {message["action"]} queue')

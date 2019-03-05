@@ -3,9 +3,6 @@ import json
 import zlib
 import os
 
-# Stage constants
-TRANSFER = "transfer"
-
 # AWS session
 session = botocore.session.get_session()
 
@@ -37,20 +34,11 @@ def lambda_handler(event, context):
     # Remote dynamodb client
     remote_dynamodb = session.create_client("dynamodb", region_name=message["table-region"])
 
-    # Init stage
+    # Init
     if "continuation-token" not in message:
 
         # Setup vars
         message["batch"], message["count"] = 0, 0
-
-        # Update stage to run
-        dynamodb.update_item(
-            TableName=table,
-            Key={"key": {"S": message["key"]}, "timestamp": {"N": message["timestamp"]}},
-            ExpressionAttributeNames={"#S": "stage"},
-            ExpressionAttributeValues={":R": {"S": TRANSFER}},
-            UpdateExpression="SET #S = :R"
-        )
 
     # Build segment specific prefix
     prefix = "/".join([message["bucket-prefix"], hex(message["segment"]), ""])
