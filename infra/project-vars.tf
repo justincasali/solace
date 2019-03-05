@@ -16,32 +16,32 @@ variable "max_segments" {
 }
 
 variable "backup_attempts" {
-  description = "backup sqs max receive count"
+  description = "backup lambda attempts per batch"
   default     = 3
 }
 
 variable "backup_timeout" {
-  description = "backup lambda & sqs timeout"
+  description = "backup lambda and sqs timeout, time inbetween attempts"
   default     = 30
 }
 
-variable "backup_delay" {
-  description = "backup sqs delay seconds"
+variable "backup_spacing" {
+  description = "backup batch spacing in seconds"
   default     = 0
 }
 
 variable "restore_attempts" {
-  description = "restore sqs max receive count"
+  description = "restore lambda attempts per batch"
   default     = 3
 }
 
 variable "restore_timeout" {
-  description = "restore lambda & sqs timeout"
+  description = "backup lambda and sqs timeout, time inbetween attempts"
   default     = 30
 }
 
-variable "restore_delay" {
-  description = "restore sqs delay seconds"
+variable "restore_spacing" {
+  description = "restore batch spacing in seconds"
   default     = 0
 }
 
@@ -51,11 +51,11 @@ variable "compression_level" {
 }
 
 variable "request_timeout" {
-  description = "request lambda & sqs timeout"
+  description = "request lambda and sqs timeout"
   default     = 15
 }
 
 variable "redrive_timeout" {
-  description = "redrive lambda & sqs timeout"
+  description = "redrive lambda and sqs timeout"
   default     = 15
 }
