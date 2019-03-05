@@ -56,7 +56,7 @@ Location of data within S3, stored under the prefix path. Be sure to change this
 
 ## Status
 
-Check a task's status with the `backup-table` and `restore-table`.
+Check a task's status with the `backup-table` and `restore-table`:
 
 * Task is done: `completed-segments + failed-segments == total-segments`
 * Task has succeeded: `completed-segments == total-segments`
@@ -77,13 +77,28 @@ terraform init -backend-config 'config/<backend-file>.tfvars' infra/
 terraform apply -var-file 'config/<var-file>.tfvars' infra/
 ```
 
-## Infra (working on docs)
-### SQS
-### Lambda
+## Infra (working on diagram)
+
+### SQS + Lambda
+
+Each sqs queue has an associated lambda function set up to trigger on message receive.
+
+`request-queue` + `request-lambda`: This function processes incoming messages, initializes the task entry in the database, and seeds the respective processing queue with a message per segment
+
+`backup-queue` + `restore-lambda`: This function backups up data one batch at a time, sending an updated message to the queue if more data exists.
+
+`restore-queue` + `restore-lambda`: This function restores data one batch at a time, sending an updated message to the queue if more data exists.
+
+`redrive-queue` + `redrive-lambda`: This function collects failed backup/restore messages and increments the failed-segments field in the database.
+
+
 ### DynamoDB
+
+Status and record tables for backup and restore tasks.
+
 ### IAM
 
-Backup/Restore roles currently have blanket access to DynamoDB & S3 and must be refined
+Backup/Restore roles currently have blanket access to DynamoDB & S3 and must be refined.
 
 ## Data Schema
 
