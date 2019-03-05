@@ -88,6 +88,7 @@ def lambda_handler(event, context):
 
     # Attempt to send messages to queue
     try:
+
         # Seed queue
         for segment in range(message["total-segments"]):
 
