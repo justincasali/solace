@@ -1,5 +1,6 @@
 import botocore.session
 import json
+import pickle
 import zlib
 import os
 
@@ -70,8 +71,8 @@ def lambda_handler(event, context):
     # Decompress data
     data = zlib.decompress(body)
 
-    # Load items from utf-8 encoded json
-    items = json.loads(data.decode("utf-8"))
+    # Deserialize items
+    items = pickle.loads(data)
 
     # Get item count
     count = len(items)
