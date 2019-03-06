@@ -106,7 +106,7 @@ Backup/Restore roles currently have blanket access to DynamoDB & S3 and must be 
 bucket/prefix/segment/batch
 ```
 
-Batch is `zlib` compressed `pickle` serialization of DynamoDB entries.
+Batch is zlib compressed json dump of DynamoDB entries.
 
 Segments and batches are `0x` prefixed hex values.
 

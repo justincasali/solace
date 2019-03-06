@@ -1,6 +1,5 @@
 import botocore.session
 import json
-import pickle
 import zlib
 import os
 
@@ -53,8 +52,8 @@ def lambda_handler(event, context):
         TotalSegments=message["total-segments"]
     )
 
-    # Serialize items
-    data = pickle.dumps(response["Items"])
+    # Dump items into utf-8 encoded json
+    data = json.dumps(response["Items"], ensure_ascii=False).encode("utf-8")
 
     # Compress data using zlib
     body = zlib.compress(data, level=compression_level)
