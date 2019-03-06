@@ -120,3 +120,4 @@ Segments and batches are `0x` prefixed hex values.
 - Currently no way to kill a backup/restore task once it starts.
 - Lambda default concurrent execution limit of 1000 per backup/restore task.
 - Backup is not point in time but _range_ in time, fits with DynamoDB's eventually consistent nature.
+- Backup entries are serialized for storage using the python pickle library and thus are language specific.
