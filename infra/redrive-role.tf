@@ -1,6 +1,7 @@
 resource "aws_iam_role" "redrive_lambda_role" {
   name               = "${local.prefix}-redrive-lambda-role"
   assume_role_policy = "${data.aws_iam_policy_document.redrive_lambda_sts_policy.json}"
+  tags               = "${var.tags}"
 }
 
 resource "aws_iam_role_policy_attachment" "redrive_lambda_execution_access" {
