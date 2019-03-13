@@ -5,6 +5,7 @@ resource "aws_dynamodb_table" "backup_table" {
 
   name         = "${local.prefix}-backup-table"
   billing_mode = "PAY_PER_REQUEST"
+  tags         = "${var.tags}"
 
   hash_key  = "key"
   range_key = "timestamp"

@@ -1,6 +1,7 @@
 resource "aws_iam_role" "restore_lambda_role" {
   name               = "${local.prefix}-restore-lambda-role"
   assume_role_policy = "${data.aws_iam_policy_document.restore_lambda_sts_policy.json}"
+  tags               = "${var.tags}"
 }
 
 resource "aws_iam_role_policy_attachment" "restore_lambda_execution_access" {

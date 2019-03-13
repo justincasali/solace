@@ -4,3 +4,7 @@ profile = "personal"
 
 # Project vars
 env = "dev"
+
+tags {
+    uuid = "42"
+}

@@ -10,6 +10,12 @@ variable "profile" {
   description = "aws credential profile"
 }
 
+variable "tags" {
+  type        = "map"
+  description = "aws tag map for resources"
+  default     = {}
+}
+
 variable "max_segments" {
   description = "maximum segments permitted per task"
   default     = 64

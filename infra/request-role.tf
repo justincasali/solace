@@ -1,6 +1,7 @@
 resource "aws_iam_role" "request_lambda_role" {
   name               = "${local.prefix}-request-lambda-role"
   assume_role_policy = "${data.aws_iam_policy_document.request_lambda_sts_policy.json}"
+  tags               = "${var.tags}"
 }
 
 resource "aws_iam_role_policy_attachment" "request_lambda_execution_access" {

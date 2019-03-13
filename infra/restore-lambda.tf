@@ -7,6 +7,7 @@ data "archive_file" "restore_lambda_zip" {
 resource "aws_lambda_function" "restore_lambda" {
   function_name = "${local.prefix}-restore-lambda"
   role          = "${aws_iam_role.restore_lambda_role.arn}"
+  tags          = "${var.tags}"
 
   depends_on = [
     "aws_sqs_queue.restore_queue",

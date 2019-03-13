@@ -1,6 +1,7 @@
 resource "aws_iam_role" "backup_lambda_role" {
   name               = "${local.prefix}-backup-lambda-role"
   assume_role_policy = "${data.aws_iam_policy_document.backup_lambda_sts_policy.json}"
+  tags               = "${var.tags}"
 }
 
 resource "aws_iam_role_policy_attachment" "backup_lambda_execution_access" {

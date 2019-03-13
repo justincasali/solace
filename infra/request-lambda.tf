@@ -7,6 +7,7 @@ data "archive_file" "request_lambda_zip" {
 resource "aws_lambda_function" "request_lambda" {
   function_name = "${local.prefix}-request-lambda"
   role          = "${aws_iam_role.request_lambda_role.arn}"
+  tags          = "${var.tags}"
 
   depends_on = [
     "aws_sqs_queue.request_queue",
